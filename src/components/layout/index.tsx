@@ -15,7 +15,9 @@ export const Layout = ({ children, className = '' }: LayoutProps) => {
     >
       <AppProvider>
         <Navbar />
-        <div className='container h-full pt-8 pb-12 mt-16'>{children}</div>
+        <div className='container h-full pt-8 pb-12 mt-16 mx-40'>
+          {children}
+        </div>
         <Footer />
       </AppProvider>
     </section>
