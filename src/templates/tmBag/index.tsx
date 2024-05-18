@@ -2,26 +2,26 @@
 import DeliveryCheckbox from '@/components/checkbox'
 import { Checkout } from '@/components/checkout'
 import { useAppDispatch, useAppSelector } from '@/hooks/useAppSelector'
-import { setCheckout, setTotalPayment } from '@/redux/features/productSlice'
-import { FaceSmileIcon, ArrowLeftIcon } from '@heroicons/react/20/solid'
-import { useEffect } from 'react'
+import {
+  CardProductsProps,
+  setCheckout,
+  setLessTotalPayment,
+  setProducts
+} from '@/redux/features/productSlice'
+import {
+  FaceSmileIcon,
+  ArrowLeftIcon,
+  CakeIcon
+} from '@heroicons/react/20/solid'
 
 export const TmBag = () => {
   const dispatch = useAppDispatch()
-  const { products, checkout, totalPayment } = useAppSelector(
+  const { products, checkout, totalPayment, delivery } = useAppSelector(
     (state) => state.productReducer
   )
 
-  useEffect(() => {
-    let total = 0
-    products?.map((pdt) => {
-      total += pdt.price
-    })
-    dispatch(setTotalPayment(total))
-  }, [products])
-
   return (
-    <section className='h-full w-full'>
+    <section className='h-full w-full px-8'>
       <h1 className='text-gray-500 text-sm tracking-wide'>
         Dulces Delicateses |{' '}
         <span className='text-primary-dark'>Tus Productos</span>
@@ -62,28 +62,50 @@ export const TmBag = () => {
               <Checkout />
             ) : (
               <>
-                {products?.map((_, index) => (
+                {products?.map((product: CardProductsProps, index: number) => (
                   <div
-                    className='w-3/6 border-secondary-dark border-2 rounded-2xl h-[18rem] p-4 flex items-center justify-between'
+                    className='w-full xl:w-3/6 border-secondary-dark border-2 rounded-2xl h-auto md:h-[18rem] p-4 flex flex-col md:flex-row items-center justify-between'
                     key={index}
                   >
                     <div className='rounded-md overflow-hidden'>
-                      <img
-                        src='/torta.jpeg'
-                        alt='torta-image'
-                        className='h-[16rem] w-[16rem] object-cover'
-                      />
+                      {product.image ? (
+                        <img
+                          src={product.image}
+                          alt='torta-image'
+                          className='h-[16rem] w-[16rem] object-cover'
+                        />
+                      ) : (
+                        <CakeIcon className='text-gray-400 w-[14rem]' />
+                      )}
                     </div>
-                    <div className='flex flex-col items-start justify-center w-4/6 pl-4 gap-y-3 relative h-full'>
-                      <button className='absolute right-0 top-0 bg-primary-dark px-4 py-2 rounded-2xl text-white'>
+                    <div className='flex flex-col-reverse md:flex-col items-start justify-center w-full md:w-4/6 pl-4 gap-y-3 relative h-3/6 md:h-full'>
+                      <button
+                        className='relative md:absolute right-0 top-0 bg-primary-dark px-4 py-2 rounded-2xl text-white'
+                        onClick={() => {
+                          dispatch(
+                            setProducts(
+                              products?.filter((pdt) => pdt.id !== product.id)
+                            )
+                          )
+                          dispatch(setLessTotalPayment(product.price))
+                        }}
+                      >
                         Eliminar
                       </button>
                       <span className='text-secondary-dark text-2xl font-medium'>
-                        Torta de Oreo con Chocolate
+                        {product.name}
                       </span>
-                      <span className='text-secondary-dark font-medium'>
-                        Precio: 20$
-                      </span>
+                      {product.price && (
+                        <span className='text-secondary-dark font-medium'>
+                          {product.price}
+                        </span>
+                      )}
+                      {product.description && (
+                        <p className='text-gray-600 text-xs'>
+                          {product.description}
+                        </p>
+                      )}
+
                       <span className='text-secondary-dark font-medium'>
                         Cantidad: 1
                       </span>
@@ -94,12 +116,12 @@ export const TmBag = () => {
             )}
 
             <div
-              className={`w-4/6 flex items-center justify-between ${
+              className={`w-full lg:w-4/6 flex items-center justify-between ${
                 checkout ? 'mb-8' : 'mt-6'
               }`}
             >
-              <DeliveryCheckbox />
-              <span className='text-primary-dark font-medium text-xl'>
+              <DeliveryCheckbox delivery={delivery} />
+              <span className='text-primary-dark font-medium text-xl text-center'>
                 TOTAL: {totalPayment}$
               </span>
             </div>

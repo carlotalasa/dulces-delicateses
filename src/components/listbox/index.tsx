@@ -6,13 +6,24 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 interface ListBoxProps {
   options: Array<{ name: string }>
   className?: string
+  onHandleChange?: (e: any) => void
 }
 
-export const ListBox = ({ options, className = '' }: ListBoxProps) => {
+export const ListBox = ({
+  options,
+  onHandleChange,
+  className = ''
+}: ListBoxProps) => {
   const [selected, setSelected] = useState(options[0])
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox
+      value={selected}
+      onChange={(e) => {
+        setSelected(e)
+        if (onHandleChange) onHandleChange(e)
+      }}
+    >
       <div className='relative mt-1 cursor-pointer'>
         <Listbox.Button
           className={`relative w-[14rem] cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-pimary-dark sm:text-sm ${className}`}

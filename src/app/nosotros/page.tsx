@@ -11,15 +11,15 @@ export default function NosotrosPage() {
   return (
     <main className='bg-gray-100 h-screen overflow-y-scroll'>
       <Layout>
-        <section className='h-full'>
+        <section className='h-full p-8'>
           <h2 className='text-gray-500 text-sm tracking-wide'>
             Dulces Delicateses |{' '}
             <span className='text-primary-dark'>Nosotros</span>
           </h2>
 
-          <div className='mt-12 flex items-center justify-between gap-x-10 h-full'>
+          <div className='mt-12 flex flex-col lg:flex-row items-center justify-between gap-x-10 h-full'>
             <div className='flex flex-col items-center justify-center space-y-3 border border-primary-dark py-4 px-8 rounded-lg'>
-              <div className='shadow-md w-[20rem] rounded-full overflow-hidden'>
+              <div className='shadow-md w-full sm:w-[20rem] rounded-full overflow-hidden'>
                 <img src='/carlota-profile.jpeg' alt='Carlota Image' />
               </div>
               <label className='font-medium text-primary-dark text-2xl'>
@@ -29,7 +29,7 @@ export default function NosotrosPage() {
                 Chef Internacional
               </span>
             </div>
-            <div className='flex flex-col items-center justify-center'>
+            <div className='flex flex-col-reverse lg:flex-col items-center justify-center'>
               <img src='/logo.png' className='w-[15rem]' alt='Carlota Image' />
               <div className='p-4 w-full bg-gray-200 rounded-lg'>
                 <p className='text-justify font-light text-primary-dark text-base'>

@@ -8,7 +8,7 @@ export const Navbar = () => {
   return (
     <section className='w-full flex items-center justify-center bg-white fixed top-0 z-50'>
       <nav className='container w-full h-16 flex items-center justify-between'>
-        <div className='flex items-center justify-start gap-x-6 md:gap-x-12'>
+        <div className='flex items-center justify-start gap-x-6 md:gap-x-12 pl-8 md:px-4'>
           <Link
             href='/'
             className='uppercase font-normal text-xl tracking-wide text-primary-dark'
@@ -17,19 +17,19 @@ export const Navbar = () => {
           </Link>
           <Link
             href='/'
-            className='uppercase text-sm tracking-wide text-gray-500 hover:text-primary-dark'
+            className='hidden md:block uppercase text-sm tracking-wide text-gray-500 hover:text-primary-dark'
           >
             Catálogo
           </Link>
           <Link
             href='/pasteleria'
-            className='uppercase text-sm tracking-wide text-gray-500 hover:text-primary-dark'
+            className='hidden md:block uppercase text-sm tracking-wide text-gray-500 hover:text-primary-dark'
           >
             Pasteleria
           </Link>
           <Link
             href='/nosotros'
-            className='uppercase text-sm tracking-wide text-gray-500 hover:text-primary-dark'
+            className='hidden md:block uppercase text-sm tracking-wide text-gray-500 hover:text-primary-dark'
           >
             Nosotros
           </Link>
@@ -40,7 +40,7 @@ export const Navbar = () => {
             Contacto
           </Link> */}
         </div>
-        <div>
+        <div className='pr-8 md:pr-2'>
           <Link href='/bolsa' className='relative'>
             {numberOfProducts > 0 && (
               <div className='absolute bg-primary-dark rounded-full w-4 flex items-center justify-center left-4'>

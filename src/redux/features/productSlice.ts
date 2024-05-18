@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-interface CardProductsProps {
+export interface CardProductsProps {
+  image: string
   name: string,
   id: string,
   price: number
+  description: string
 }
 
 interface ProductsProps {
   numberOfProducts: number
   checkout: boolean
+  delivery: boolean
   totalPayment: number
   products: Array<CardProductsProps>
 }
@@ -16,6 +19,7 @@ interface ProductsProps {
 const initialState: ProductsProps = {
   numberOfProducts: 0,
   checkout: false,
+  delivery: false,
   totalPayment: 0,
   products: []
 }
@@ -31,12 +35,18 @@ export const productSlice = createSlice({
     setCheckout: (state, action) => {
       state.checkout = action?.payload
     },
+    setDelivery: (state, action) => {
+      state.delivery = action?.payload
+    },
     setTotalPayment: (state, action) => {
-      state.totalPayment = action?.payload
+      state.totalPayment += typeof action?.payload === 'string' ? parseFloat(action?.payload) : action?.payload
+    },
+    setLessTotalPayment: (state, action) => {
+      state.totalPayment -= typeof action?.payload === 'string' ? parseFloat(action?.payload) : action?.payload
     }
   }
 })
 
-export const { setProducts, setCheckout, setTotalPayment } = productSlice.actions
+export const { setProducts, setCheckout, setTotalPayment, setLessTotalPayment, setDelivery } = productSlice.actions
 
 export default productSlice.reducer

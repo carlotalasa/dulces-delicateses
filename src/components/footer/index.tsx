@@ -99,7 +99,7 @@ export const Footer = () => {
           </div>
         </div>
       </footer>
-      <div className='bg-primary-dark w-full flex items-center justify-center py-1'>
+      <div className='bg-primary-dark w-full flex items-center justify-center py-1 px-2'>
         <p className='text-white'>
           Todos los derechos reservados - Venezuela - 2024
         </p>

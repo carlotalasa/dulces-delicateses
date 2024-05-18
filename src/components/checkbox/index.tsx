@@ -1,20 +1,22 @@
 'use client'
 import React, { useState } from 'react'
 import './styles.css' // Asegúrate de tener este archivo en la misma carpeta que tu componente
-import { setTotalPayment } from '@/redux/features/productSlice'
-import { useAppDispatch, useAppSelector } from '@/hooks/useAppSelector'
+import {
+  setDelivery,
+  setLessTotalPayment,
+  setTotalPayment
+} from '@/redux/features/productSlice'
+import { useAppDispatch } from '@/hooks/useAppSelector'
 
-export const DeliveryCheckbox = () => {
-  const [isChecked, setIsChecked] = useState(false)
+export const DeliveryCheckbox = ({ delivery }: { delivery: boolean }) => {
   const dispatch = useAppDispatch()
-  const { totalPayment } = useAppSelector((state) => state.productReducer)
 
   const handleChange = () => {
-    setIsChecked(!isChecked)
-    if (!isChecked) {
-      dispatch(setTotalPayment(totalPayment + 4))
+    dispatch(setDelivery(!delivery))
+    if (!delivery) {
+      dispatch(setTotalPayment(4))
     } else {
-      dispatch(setTotalPayment(totalPayment - 4))
+      dispatch(setLessTotalPayment(4))
     }
   }
 
@@ -23,11 +25,11 @@ export const DeliveryCheckbox = () => {
       Incluir delivery (+4.0$)
       <input
         type='checkbox'
-        checked={isChecked}
+        checked={delivery}
         onChange={handleChange}
         className='real-checkbox'
       />
-      <span className={`checkmark ${isChecked ? 'checked' : ''}`}></span>
+      <span className={`checkmark ${delivery ? 'checked' : ''}`}></span>
     </label>
   )
 }
