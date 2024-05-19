@@ -1,5 +1,6 @@
-import { useAppDispatch } from '@/hooks/useAppSelector'
-import { setProducts } from '@/redux/features/productSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/useAppSelector'
+import { setProducts, setSuccesfullView } from '@/redux/features/productSlice'
+import { useCreateOrderMutation } from '@/redux/service/productsApi'
 import { Input } from '@headlessui/react'
 import { useState } from 'react'
 
@@ -9,17 +10,41 @@ interface formStateProps {
   phone: string | null
   address: string | null
   payment: string | null
+  email: string | null
 }
 
 export const Checkout = () => {
   const dispatch = useAppDispatch()
+  const { products, checkout, totalPayment, delivery } = useAppSelector(
+    (state) => state.productReducer
+  )
+  const [createOrder, order] = useCreateOrderMutation()
   const [form, setForm] = useState<formStateProps>({
     name: null,
     id: null,
     phone: null,
     address: null,
-    payment: null
+    payment: null,
+    email: null
   })
+
+  const handleCreateOrder = async () => {
+    const newOrder = await createOrder({
+      products,
+      address: form.address,
+      payment_method: form.payment,
+      client: {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        identity: form.id
+      }
+    })
+
+    if ('data' in newOrder) {
+      dispatch(setSuccesfullView(true))
+    }
+  }
 
   return (
     <form className='h-full w-full flex flex-col items-center justify-center'>
@@ -57,6 +82,22 @@ export const Checkout = () => {
                   return {
                     ...fields,
                     id: e.target.value
+                  }
+                })
+              }
+            />
+          </div>
+
+          <div className='flex flex-col items-start justify-center w-[15rem] sm:w-[20rem] md:w-[30rem]'>
+            <span className='ml-1 text-primary-dark text-md'>Email</span>
+            <Input
+              className='mt-3 block w-full rounded-lg border py-1.5 px-3 text-sm/6 text-primary-dark border-primary-dark outline-none'
+              placeholder='Ej: dulcesdelicateses@gmail.com'
+              onChange={(e) =>
+                setForm((fields) => {
+                  return {
+                    ...fields,
+                    email: e.target.value
                   }
                 })
               }
@@ -121,14 +162,16 @@ export const Checkout = () => {
               !form.id ||
               !form.phone ||
               !form.address ||
-              !form.payment
+              !form.payment ||
+              !form.email ||
+              order.isLoading
             }
             onClick={(e) => {
               e.preventDefault()
-              dispatch(setProducts([]))
+              handleCreateOrder()
             }}
           >
-            Finalizar Pedido
+            {order.isLoading ? 'Cargando...' : 'Finalizar Pedido'}
           </button>
         </div>
       </div>

@@ -8,8 +8,17 @@ export const productsApi = createApi({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: () => '/api/v1/products/products/'
+    }),
+    createOrder: builder.mutation({
+      query: (args) => ({
+        url: '/api/v1/orders/create-order/',
+        body: {
+          ...args
+        },
+        method: 'POST'
+      })
     })
   })
 })
 
-export const { useGetProductsQuery } = productsApi
+export const { useGetProductsQuery, useCreateOrderMutation } = productsApi

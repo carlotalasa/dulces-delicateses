@@ -2,18 +2,24 @@
 import { CardsComponent, CardsComponentProps } from '@/components/cards'
 import { ListBox } from '@/components/listbox'
 import { useGetProductsQuery } from '@/redux/service/productsApi'
+import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 
 const optionsCatalog = [
-  { name: 'Todos Los productos' },
-  { name: 'Tortas' },
-  { name: 'Galletas' },
-  { name: 'Brazo gitano' },
-  { name: 'Alfajores' }
+  { name: 'Todos Los productos', id: 0 },
+  { name: 'Tortas', id: 3 },
+  { name: 'Brazo gitano', id: 4 },
+  { name: 'Alfajores', id: 2 },
+  { name: 'Cheescake', id: 5 }
 ]
 
 export const TmCatalogo = () => {
   const { data, error, isLoading, isFetching } = useGetProductsQuery(null)
+  const [productsData, setProductsData] = useState([])
+
+  useEffect(() => {
+    setProductsData(data)
+  }, [data])
 
   return (
     <section className='h-full px-8'>
@@ -22,7 +28,20 @@ export const TmCatalogo = () => {
       </h1>
       <div className='mt-6 flex items-center justify-between gap-y-3 flex-col sm:flex-row'>
         <h3 className='text-primary-dark text-xl tracking-wide'>Productos</h3>
-        <ListBox options={optionsCatalog} />
+        <ListBox
+          options={optionsCatalog}
+          onHandleChange={(e) => {
+            if (e.id === 0) {
+              setProductsData(data)
+            } else {
+              setProductsData(() =>
+                data.filter(
+                  (dt: CardsComponentProps) => dt.category_id === e.id
+                )
+              )
+            }
+          }}
+        />
       </div>
 
       {/* cards grid */}
@@ -35,9 +54,11 @@ export const TmCatalogo = () => {
           </div>
         ) : (
           <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-12 gap-x-12 h-full'>
-            {data?.map((product: CardsComponentProps, index: number) => (
-              <CardsComponent key={index} {...product} />
-            ))}
+            {productsData?.map(
+              (product: CardsComponentProps, index: number) => (
+                <CardsComponent key={index} {...product} />
+              )
+            )}
           </div>
         )}
       </div>

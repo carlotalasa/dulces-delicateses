@@ -11,7 +11,7 @@ export async function generateMetadata() {
 export default function Home() {
   return (
     <main className='bg-gray-100 h-screen overflow-y-scroll'>
-      <Layout className='!h-auto'>
+      <Layout className='!h-auto md:min-h-screen'>
         <TmCatalogo />
       </Layout>
     </main>
